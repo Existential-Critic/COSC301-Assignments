@@ -1,0 +1,250 @@
+   50  export _CE_CONDA=''
+   51  export CONDA_PYTHON_EXE='C:/Users/Soren/miniconda3\python.exe'
+   52  # Copyright (C) 2012 Anaconda, Inc
+   53  # SPDX-License-Identifier: BSD-3-Clause
+   54  __add_sys_prefix_to_path() {
+   55      if [ -n "${_CE_CONDA}" ] && [ -n "${WINDIR+x}" ]; then         SYSP=$(\dirname "${CONDA_EXE}");     else         SYSP=$(\dirname "${CONDA_EXE}");         SYSP=$(\dirname "${SYSP}");     fi     if [ -n "${WINDIR+x}" ]; then         PATH="${SYSP}/bin:${PATH}";         PATH="${SYSP}/Scripts:${PATH}";         PATH="${SYSP}/Library/bin:${PATH}";         PATH="${SYSP}/Library/usr/bin:${PATH}";         PATH="${SYSP}/Library/mingw-w64/bin:${PATH}";         PATH="${SYSP}:${PATH}";     else         PATH="${SYSP}/bin:${PATH}";     fi;     \export PATH; }
+   56  __conda_exe() (     __add_sys_prefix_to_path;     "$CONDA_EXE" $_CE_M $_CE_CONDA "$@"; )
+   57  __conda_hashr() {     if [ -n "${ZSH_VERSION:+x}" ]; then         \rehash;     elif [ -n "${POSH_VERSION:+x}" ]; then         :  # pass
+   58      else         \hash -r;     fi; }
+   59  __conda_activate() {     if [ -n "${CONDA_PS1_BACKUP:+x}" ]; then
+   60          PS1="$CONDA_PS1_BACKUP";         \unset CONDA_PS1_BACKUP;     fi;     \local ask_conda;     ask_conda="$(PS1="${PS1:-}" __conda_exe shell.posix "$@")" || \return;     \eval "$ask_conda";     __conda_hashr; }
+   61  __conda_reactivate() {     \local ask_conda;     ask_conda="$(PS1="${PS1:-}" __conda_exe shell.posix reactivate)" || \return;     \eval "$ask_conda";     __conda_hashr; }
+   62  conda() {     \local cmd="${1-__missing__}";     case "$cmd" in         activate|deactivate)             __conda_activate "$@";             ;;         install|update|upgrade|remove|uninstall)             __conda_exe "$@" || \return;             __conda_reactivate;             ;;         *)             __conda_exe "$@";             ;;     esac; }
+   63  if [ -z "${CONDA_SHLVL+x}" ]; then     \export CONDA_SHLVL=0
+   64      if [ -n "${_CE_CONDA:+x}" ] && [ -n "${WINDIR+x}" ]; then         PATH="$(\dirname "$CONDA_EXE")/condabin${PATH:+":${PATH}"}";     else         PATH="$(\dirname "$(\dirname "$CONDA_EXE")")/condabin${PATH:+":${PATH}"}";     fi;     \export PATH
+   65      if [ -z "${PS1+x}" ]; then         PS1=;     fi; fi
+   66  export CONDA_EXE='C:/Users/Soren/miniconda3\Scripts\conda.exe'
+   67  export _CE_M=''
+   68  export _CE_CONDA=''
+   69  export CONDA_PYTHON_EXE='C:/Users/Soren/miniconda3\python.exe'
+   70  # Copyright (C) 2012 Anaconda, Inc
+   71  # SPDX-License-Identifier: BSD-3-Clause
+   72  __add_sys_prefix_to_path() {
+   73      if [ -n "${_CE_CONDA}" ] && [ -n "${WINDIR+x}" ]; then         SYSP=$(\dirname "${CONDA_EXE}");     else         SYSP=$(\dirname "${CONDA_EXE}");         SYSP=$(\dirname "${SYSP}");     fi     if [ -n "${WINDIR+x}" ]; then         PATH="${SYSP}/bin:${PATH}";         PATH="${SYSP}/Scripts:${PATH}";         PATH="${SYSP}/Library/bin:${PATH}";         PATH="${SYSP}/Library/usr/bin:${PATH}";         PATH="${SYSP}/Library/mingw-w64/bin:${PATH}";         PATH="${SYSP}:${PATH}";     else         PATH="${SYSP}/bin:${PATH}";     fi;     \export PATH; }
+   74  __conda_exe() (     __add_sys_prefix_to_path;     "$CONDA_EXE" $_CE_M $_CE_CONDA "$@"; )
+   75  __conda_hashr() {     if [ -n "${ZSH_VERSION:+x}" ]; then         \rehash;     elif [ -n "${POSH_VERSION:+x}" ]; then         :  # pass
+   76      else         \hash -r;     fi; }
+   77  __conda_activate() {     if [ -n "${CONDA_PS1_BACKUP:+x}" ]; then
+   78          PS1="$CONDA_PS1_BACKUP";         \unset CONDA_PS1_BACKUP;     fi;     \local ask_conda;     ask_conda="$(PS1="${PS1:-}" __conda_exe shell.posix "$@")" || \return;     \eval "$ask_conda";     __conda_hashr; }
+   79  __conda_reactivate() {     \local ask_conda;     ask_conda="$(PS1="${PS1:-}" __conda_exe shell.posix reactivate)" || \return;     \eval "$ask_conda";     __conda_hashr; }
+   80  conda() {     \local cmd="${1-__missing__}";     case "$cmd" in         activate|deactivate)             __conda_activate "$@";             ;;         install|update|upgrade|remove|uninstall)             __conda_exe "$@" || \return;             __conda_reactivate;             ;;         *)             __conda_exe "$@";             ;;     esac; }
+   81  if [ -z "${CONDA_SHLVL+x}" ]; then     \export CONDA_SHLVL=0
+   82      if [ -n "${_CE_CONDA:+x}" ] && [ -n "${WINDIR+x}" ]; then         PATH="$(\dirname "$CONDA_EXE")/condabin${PATH:+":${PATH}"}";     else         PATH="$(\dirname "$(\dirname "$CONDA_EXE")")/condabin${PATH:+":${PATH}"}";     fi;     \export PATH
+   83      if [ -z "${PS1+x}" ]; then         PS1=;     fi; fi
+   84  echo ". ${PWD}/conda.sh" >> ~/.bashrc
+   85  conda activate
+   86  conda init bash
+   87  python --version
+   88  conda --version
+   89  conda config --add channels conda-forge 
+   90  conda install -c conda-forge "jupyterlab=3.*"
+   91  conda install -c conda-forge "numpy=1.*"
+   92  conda install -c conda-forge "pandas=1.*"
+   93  conda install -c conda-forge "black=19.*"
+   94  conda install -c conda-forge "nbconvert=6.*"
+   95  conda install -c conda-forge "seaborn"
+   96  conda install -c conda-forge "pre-commit"
+   97  git config --global user.name "Existential-Critic"
+   98  git config --global user.email soren.is@hotmail.ca
+   99  git clone https://github.com/firasm/test.git
+  100  git clone https://github.com/firasm/test.git
+  101  echo
+  102  pwd
+  103  cd C:\Users\Soren\Desktop\Y5 COSC
+  104  cd "C:\Users\Soren\Desktop\Y5 COSC"
+  105  git clone https://github.com/firasm/test.git
+  106  code --version
+  107  code ~/.bash_profile
+  108  tree ./src/
+  109  tree ./src/
+  110  jupyter lab
+  111  git clone https://github.com/ubco-W2022T1-cosc301/lab1-Existential-Critic.git
+  112  cd 'C:\Users\Soren\Desktop\Y5 COSC\COSC 301\lab1-Existential-Critic'
+  113  git clone git clone https://github.com/firasm/test.git
+  114  git clone https://github.com/firasm/test.git
+  115  jupyter lab
+  116  git clone https://github.com/ubco-W2022T1-cosc301/lab1-Existential-Critic.git
+  117  cd C:\Users\Soren\Desktop\Y5 COSC\COSC 301\lab1-Existential-Critic
+  118  cd "C:\Users\Soren\Desktop\Y5 COSC\COSC 301\lab1-Existential-Critic"
+  119  git init -b main
+  120  git add . && git commit -m "initial commit"
+  121  git commit -m "Initial commit"
+  122  git push
+  123  git remote add origin https://github.com/Existential-Critic/cosc301-lab1-Existential-Critic.git
+  124  git push
+  125  git init -b main
+  126  git add .
+  127  git commit -m "WHY"
+  128  git remote add origin https://github.com/Existential-Critic/cosc301-lab1-Existential-Critic.git
+  129  git remote iv
+  130  git remote -v
+  131  git add test.txt
+  132  git commit -m "Test commit"
+  133  git push
+  134  git clone https://github.com/ubco-W2022T1-cosc301/lab1-Existential-Critic.git
+  135  cd "C:\Users\Soren\Desktop\Y5 COSC\COSC 301\lab1-Existential-Critic"
+  136  jupyter lab
+  137  git clone https://github.com/ubco-W2022T1-cosc301/lab1-Existential-Critic.git
+  138  cd "C:\Users\Soren\Desktop\Y5 COSC\COSC 301\lab1-Existential-Critic"
+  139  jupyter lab
+  140  git add Untitled.ipynb
+  141  git commit -m "Added Python file"
+  142  git push
+  143  jupyter lab
+  144  git add cosc301-lab1-jupyter.png
+  145  git add cosc301-lab1-terminal.png
+  146  git commit -m "Added screenshots of terminal and Jupyter Lab"
+  147  git push
+  148  code activity.md
+  149  git add .
+  150  git commit -m "Finished Task 2 markdown syntax"
+  151  git push
+  152  code activity_task3.md
+  153  git add .
+  154  git commit -m "Finished Task 3 markdown syntax."
+  155  git push
+  156  exit
+  157  cd/
+  158  pwd
+  159  cd /
+  160  pwd
+  161  ls
+  162  ~
+  163  cd ~
+  164  pw
+  165  pwd
+  166  cd
+  167  ls
+  168  clear
+  169  cd ..
+  170  cd c/Users/Soren
+  171  ls
+  172  cd /c/Users/Soren/
+  173  cd ~
+  174  cd /c/Users/Soren/Desktop/
+  175  mkdir 301
+  176  cd /c/Users/Soren/Desktop/301/
+  177  mkdir level1
+  178  cd /c/Users/Soren/Desktop/301/level1/
+  179  touch test.txt
+  180  mkdir level2
+  181  cd /c/Users/Soren/Desktop/301/level1/level2/
+  182  mkdir level3
+  183  clear
+  184  cd
+  185  git clone https://github.com/ubco-W2022T1-cosc301/lab2-Existential-Critic.git
+  186  cd lab2-Existential-Critic
+  187  mkdir level1A
+  188  mkdir level1B
+  189  cd level1A
+  190  touch file1.md
+  191  mkdir level2A
+  192  cd level2A
+  193  touch file2.md
+  194  mkdir level3A
+  195  cd level3A
+  196  touch file3.md
+  197  cd ..
+  198  cd level1A
+  199  cd ../..
+  200  cd level1B
+  201  touch root.md
+  202  mkdir level2B
+  203  touch newfile1.md
+  204  touch newfile2.md
+  205  cd ..
+  206  git add .
+  207  git commit -m "Created directory structure"
+  208  git push
+  209  mkdir Task1
+  210  git add .
+  211  git commit -m "Added directory structure to Task1"
+  212  git push
+  213  cd Task1
+  214  tree
+  215  tree > directory_tree.txt
+  216  cd ..
+  217  git add .
+  218  git commit -m 'Added tree text file'
+  219  git push
+  220  ls
+  221  cd entrance
+  222  ls
+  223  cat scroll
+  224  cd cellar
+  225  ls
+  226  cat scroll
+  227  ls -F
+  228  alias ls='ls -F'
+  229  ls
+  230  ls -F
+  231  alias ls='ls'
+  232  ls
+  233  alias ls='ls -F'
+  234  ls
+  235  cat treasure
+  236  cd armoury
+  237  ls
+  238  cat scroll
+  239  cd ..
+  240  ./treasure
+  241  export I=amulet, $I
+  242  echo $I
+  243  ls
+  244  cd armoury
+  245  ls
+  246  ./treasure
+  247  export I=sword,$I
+  248  echo $I
+  249  ls
+  250  ./potion
+  251  export HP=15
+  252  echo HP
+  253  echo $HP
+  254  ls
+  255  cd chamber
+  256  ls
+  257  ./ spell
+  258  ./spell
+  259  ln -fs ../../../chapel/courtyard/aviary/hall portal
+  260  ls
+  261  cat scroll
+  262  ls
+  263  ./treasure
+  264  export I=coins,$I
+  265  ls
+  266  ./statue
+  267  echoe $HP
+  268  echo $HP
+  269  let "HP=HP-5"
+  270  echo $HP
+  271  ls
+  272  ./pieces
+  273  cd portal
+  274  ls
+  275  ./monster
+  276  ls
+  277  ./carcass
+  278  ./treasure
+  279  export I=**crown**,$I
+  280  cd library
+  281  ls
+  282  cat scroll
+  283  ./tome
+  284  pushd ..
+  285  pushd ..
+  286  pushd ..
+  287  pushd ..
+  288  pushd ..
+  289  pushd ..
+  290  git add .
+  291  git commit -m "Finished playing with the dungeon"
+  292  git push
+  293  cd entrance
+  294  tree > mydungeon.txt
+  295  git add .
+  296  git commit -m "Added my dungeon map"
+  297  git push
+  298  history -250 > dungeonHistory.txt
+  299  history 250 > dungeonHistory.txt
